@@ -1,6 +1,7 @@
 from time import sleep
 import pickle
 import os
+import random
 
 
 filename = 'accounts.pkl'
@@ -16,10 +17,11 @@ def input_integer(info, err_msg):
 
 class Account(object):
 	""" Class for holding account infomation """
-	def __init__(self, username, password, balance=0):
+	def __init__(self, username, password, account_no, balance=0):
 		self.username = username
 		self.password = password
 		self.balance = balance
+		self.account_no = account_no
 		self.history = [('Deposited =N= '+ str(balance)+' (Starting balance)')]
 
 	def __str__(self):
@@ -99,7 +101,7 @@ class Account(object):
 
 
 	def get_history(self):
-		print('\n TRANSACTION HISTORY \n ')
+		print('\n TRANSACTION HISTORY OF  {}\n '.format(self.account_no))
 		for i in self.history:
 			print('=> {}'.format(i))
 		
@@ -146,4 +148,18 @@ def update_user(mod_user):
 
 	with open(filename, 'wb') as output:
 		pickle.dump(database, output, pickle.HIGHEST_PROTOCOL)
+
+
+def gen_acc_no():
+	database = load_object()
+	tmp = []
+	for i in database:
+		tmp.append(i.account_no)
+
+	while True:
+		acc = random.randint(111111111, 999999999)
+		if acc not in tmp:
+			break
+
+	return acc
 

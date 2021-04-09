@@ -1,4 +1,4 @@
-from Account import Account, input_integer
+from Account import Account, input_integer, gen_acc_no
 from Account import update_user, verify_user, save_user
 from time import sleep
 
@@ -32,16 +32,24 @@ def register_user():
 		
 		print("The two passwords should be the same!\n Try again!\n")
 
+	print("Generating Account number")
+	acc = gen_acc_no()
+	sleep(2)
+	print('Generated sucessfully')
+	print ('Your account number is {}\n'.format(acc))
+
+
 	amt = input_integer("Enter amount to start with: \n", "Invalid amount!\n Setting balance to =N= 0.00")
 
 	if amt < 0:
 		amt = 0
 
 	sleep(3)
-	user = Account(username, password1, amt)
+	user = Account(username, password1, acc, amt)
 	save_user(user)
 
 	print('Registration Successful!')
+	
 
 
 def process_registered_user():
@@ -75,7 +83,8 @@ def process_registered_user():
 				update_user(current_user)
 				print('Pin changed sucessfully!\n')
 			elif option == 5:
-				print('Your account balance is:\n =N= {}'.format(current_user.balance))
+				print("Account Number: {}".format(current_user.account_no))
+				print('\n Account balance is:\n =N= {}'.format(current_user.balance))
 			elif option == 6:
 				current_user.get_history()
 
@@ -103,13 +112,7 @@ while play == 'y':
 	
 	print('1. Register \t\t 2. Already registered \n')
 
-	try:
-		option = int(input('Select an option: '))
-	except:
-		print('\n Invalid input! \n')
-		option = None
-
-
+	option = input_integer('Select an option: ', '\n Invalid input! \n')
 
 	if option == 1:
 		register_user()
